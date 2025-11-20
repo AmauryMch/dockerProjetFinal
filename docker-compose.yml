@@ -7,8 +7,9 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-    ports:
-      - "${SPRING_PORT}:${SPRING_PORT}"
+    # Port non exposé sur l'hôte, uniquement accessible via le réseau interne
+    expose:
+      - "8080"
     networks:
       - app-network
     depends_on:
@@ -40,10 +41,24 @@ services:
   webapp:
     build: ./webapp
     container_name: webapp-frontend
-    ports:
-      - "${WEBAPP_PORT}:80"
+    # Port non exposé sur l'hôte, uniquement accessible via le réseau interne
+    expose:
+      - "80"
     networks:
       - app-network
+    restart: unless-stopped
+
+  # Reverse Proxy Gateway (point d'entrée unique)
+  gateway:
+    build: ./gateway
+    container_name: nginx-gateway
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      - api
+      - webapp
     restart: unless-stopped
 
 networks:
