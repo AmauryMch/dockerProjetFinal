@@ -127,6 +127,32 @@ VITE_API_BASE_URL=http://localhost
 
 ---
 
+## Healthchecks (Vérification d'état automatique)
+
+Des healthchecks sont mis en place pour garantir que les services critiques sont bien démarrés et fonctionnels avant que les autres services qui en dépendent ne démarrent à leur tour.
+
+- **db (PostgreSQL)** :
+  - Utilise la commande `pg_isready` pour vérifier que la base de données est prête à accepter des connexions.
+  - Si la base n'est pas prête, le service `spring-api` attend avant de démarrer.
+
+- **spring-api (API Spring Boot)** :
+  - Un healthcheck interroge l'endpoint HTTP `/api/health` sur le port 8080 pour s'assurer que l'API est bien démarrée et répond.
+  - Si l'API n'est pas prête, le service `reverse-proxy` attend avant de démarrer.
+
+- **reverse-proxy (Nginx)** :
+  - Démarre uniquement lorsque l'API (`spring-api`) est considérée comme healthy (`condition: service_healthy`) **et** que le frontend (`webapp`) est démarré (`condition: service_started`).
+  - Cela garantit que les requêtes HTTP reçues par le reverse proxy ne sont pas envoyées vers un backend ou un frontend indisponible.
+
+**Résumé du fonctionnement** :
+
+1. PostgreSQL démarre et devient healthy.
+2. L'API Spring Boot attend que PostgreSQL soit healthy, puis démarre et expose `/api/health`.
+3. Le reverse-proxy attend que l'API soit healthy et que le frontend soit démarré avant de router les requêtes.
+
+Cela améliore la robustesse de l'architecture et évite les erreurs de connexion au démarrage.
+
+---
+
 **Remarque** :
 - Seul le reverse proxy est exposé, les autres services sont isolés pour plus de sécurité.
 - Les logs du reverse proxy sont visibles via `docker logs reverse-proxy`.
