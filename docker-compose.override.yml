@@ -1,0 +1,29 @@
+# Fichier docker-compose.override.yml pour le mode développement
+# Ce fichier surcharge la configuration principale pour faciliter le développement local.
+# Il n'est pas destiné à la production.
+
+services:
+  api:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev  # Active le profil Spring 'dev'
+    ports:
+      - "8081:8080"  # Expose l'API sur un port différent en local
+
+  db:
+    ports:
+      - "5433:5432"  # Expose la base sur un port différent pour éviter les conflits
+
+  webapp:
+    environment:
+      VITE_API_BASE_URL: http://localhost:8081  # Pointe vers l'API dev
+    ports:
+      - "3001:80"  # Expose le frontend sur un port différent
+
+  reverse-proxy:
+    ports:
+      - "81:80"  # Expose le reverse proxy sur un port différent
+
+# Remarques :
+# - Les ports sont modifiés pour éviter les conflits avec d'autres services locaux.
+# - Les variables d'environnement activent les modes développement des applications.
+# - Ce fichier est automatiquement pris en compte par Docker Compose sauf si l'option -f est utilisée.

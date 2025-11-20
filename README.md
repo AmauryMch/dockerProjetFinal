@@ -32,7 +32,25 @@ Tous les services communiquent via un réseau Docker interne. Seul le reverse pr
    cd dockerProjetFinal
    ```
 
-2. Adapter le fichier `.env` si besoin (ports, credentials...)
+2. Mode développement avec docker-compose.override.yml
+
+Un fichier `docker-compose.override.yml` est fourni et déjà valorisé/prêt à l'emploi pour faciliter le développement local. Il surcharge la configuration principale avec des options adaptées au dev :
+
+- **Ports différents** : les services sont exposés sur d'autres ports pour éviter les conflits avec d'autres applications locales.
+- **Variables d'environnement** : activation des profils ou modes "dev" dans les applications (ex : `SPRING_PROFILES_ACTIVE=dev`).
+
+**Exemple d'utilisation** : ce fichier est déjà configuré pour un usage immédiat, il est automatiquement pris en compte avec la commande classique :
+```sh
+docker compose up -d
+```
+Pour ignorer ce fichier et n'utiliser que la config principale (production) :
+```sh
+docker compose -f docker-compose.yml up -d
+```
+
+**Remarque** : Ce fichier n'est pas destiné à la production et peut être personnalisé par chaque développeur. Il est conseillé de l'ajouter au `.gitignore` pour garder une config locale propre à chacun.
+
+3. Adapter le fichier `.env` si besoin (ports, credentials...)
 > ⚠️ **Attention :** Les valeurs ci-dessous sont fournies uniquement à titre d'exemple pour faciliter la compréhension. Ne jamais utiliser ces identifiants ou mots de passe en production ou dans un dépôt public.
 
 ```env
@@ -51,11 +69,18 @@ VITE_API_BASE_URL=http://localhost
 
 > Remplacez chaque valeur par vos propres informations pour garantir la sécurité de votre application.
 
-3. Builder et lancer tous les services :
+4. Builder et lancer tous les services :
+
+   **En mode dev**
    ```sh
    docker compose up -d
    ```
-4. Pour arrêter :
+   
+   **En mode production**
+   ```sh
+   docker compose -f docker-compose.yml up -d
+   ```
+5. Pour arrêter :
    ```sh
    docker compose down
    ```
