@@ -31,7 +31,26 @@ Tous les services communiquent via un réseau Docker interne. Seul le reverse pr
    git clone <repo-url>
    cd dockerProjetFinal
    ```
+
 2. Adapter le fichier `.env` si besoin (ports, credentials...)
+> ⚠️ **Attention :** Les valeurs ci-dessous sont fournies uniquement à titre d'exemple pour faciliter la compréhension. Ne jamais utiliser ces identifiants ou mots de passe en production ou dans un dépôt public.
+
+```env
+POSTGRES_PORT=5432
+POSTGRES_DB=exampledb
+POSTGRES_USER=exampleuser
+POSTGRES_PASSWORD=examplepassword
+
+SPRING_DATASOURCE_URL= jdbc:postgresql://db:${POSTGRES_PORT}/${POSTGRES_DB}
+SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+REVERSE_PROXY_PORT=80
+VITE_API_BASE_URL=http://localhost
+```
+
+> Remplacez chaque valeur par vos propres informations pour garantir la sécurité de votre application.
+
 3. Builder et lancer tous les services :
    ```sh
    docker compose up -d
