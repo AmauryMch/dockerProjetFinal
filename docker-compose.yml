@@ -1,16 +1,14 @@
 services:
   # API Spring Boot
   api:
-    build:
-      context: ./spring-api
-      dockerfile: Dockerfile
+    build: ./spring-api
     container_name: spring-api
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
-      - "8080:8080"
+      - "${SPRING_PORT}:${SPRING_PORT}"
     networks:
       - app-network
     depends_on:
@@ -19,14 +17,14 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:15
+    image: postgres:18
     container_name: postgres-db
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
