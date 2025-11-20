@@ -1,13 +1,10 @@
 # Étape 1 - Build Maven
 FROM maven:3.9-alpine AS builder
 
-# Dossier de travail dans le conteneur
 WORKDIR /app
 
-# Copie du pom.xml en premier
 COPY pom.xml .
 
-# Copie du code source
 COPY src ./src
 
 RUN mvn clean package
