@@ -36,6 +36,16 @@ services:
       - app-network
     restart: unless-stopped
 
+  # Frontend webapp
+  webapp:
+    build: ./webapp
+    container_name: webapp-frontend
+    ports:
+      - "${WEBAPP_PORT}:80"
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
