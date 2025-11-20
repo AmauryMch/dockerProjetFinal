@@ -1,5 +1,10 @@
 # Projet Final - Stack Spring Boot / Frontend JS / PostgreSQL
 
+# Composition équipe :
+
+* **Mechin AMAURY** *
+* **Kellian KAUFFMANN** *
+
 > Utilisez ce fichier pour écrire la documentation en remplaçant le contenu par le vôtre.  
 > N'oubliez pas de préciser la composition de l'équipe dans ce fichier.
 
