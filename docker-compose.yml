@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 
   # Reverse Proxy Gateway (point d'entrée unique)
-  gateway:
+  reverse-proxy:
     build: ./reverse-proxy
     container_name: reverse-proxy
     ports:
